@@ -6,56 +6,55 @@ import matplotlib.pyplot as pit
 #Importando csv
 df=pd.read_csv("Fifa_world_cup_matches.csv")
 
+#print("OKEY! Archivo cargado correctamente")
 
-print("OKEY! Archivo cargado correctamente")
 # Mostrando las primeras filas del data frame
-print(df.head())
-
+#print(df.head())
 
 #cuenta la cantidad de filas y columnas que tiene
-filas,columnas = df.shape
-print (f"el detaframe tiene {filas} filas y {columnas} columnas")
+#filas,columnas = df.shape
+#print (f"el detaframe tiene {filas} filas y {columnas} columnas")
+
+#Cuenta las cantidades de goles que hizo el equipo 1
+#total_golteam1 = df["number of goals team1"].count()
+#print(f"Cantidad de filas con goles validos: {total_golteam1}")
 
 
-total_golteam1 = df["number of goals team1"].count()
-print(f"Cantidad de filas con goles validos: {total_golteam1}")
-
-
-print("<-----Analisis avanzado de datos----->")
+#print("<-----Analisis avanzado de datos----->")
 
 
 #Cuenta la cantidad de filas con una condicion
-filtro_avanzado = df['category'].str.startswith('Group A', na=False)
-df_filtrado = df[filtro_avanzado]
+#filtro_avanzado = df['category'].str.startswith('Group A', na=False)
+#df_filtrado = df[filtro_avanzado]
 
 
 #Muestra los paises que estan en el grupo A
-total_registros = df_filtrado['category'].count()
+#total_registros = df_filtrado['category'].count()
 #print(f"Cantidad de paises en el grupo A: {total_registros}")
 
 
 #Suma los valores de las columnas
-suma_puntos=df_filtrado['total attempts team1'].sum()
+#suma_puntos=df_filtrado['total attempts team1'].sum()
 #print(f"Total de puntaje en team1 es: {suma_puntos}")
 
 
-print("<-----Reporte automatizado----->")
-print(f"Total de puntaje en team1 es: {suma_puntos}")
+#print("<-----Reporte automatizado----->")
+#print(f"Total de puntaje en team1 es: {suma_puntos}")
 
 
-if Default_limite_alto:= (suma_puntos > 1000):
-   print("Alerta: Critico y alta prioridad")
-   print("Revisar inmediatamente")
+#if Default_limite_alto:= (suma_puntos > 1000):
+#   print("Alerta: Critico y alta prioridad")
+#   print("Revisar inmediatamente")
 
 
-elif suma_puntos > 500:
-   print("Aviso: puntajes moderados/altos")
-   print("Requiere revision proximo campeonato")
+#elif suma_puntos > 500:
+#   print("Aviso: puntajes moderados/altos")
+#   print("Requiere revision proximo campeonato")
 
 
-else:
-   print("El puntaje esta dentro de los parametros")
-   print("No requiere revision")
+#else:
+#   print("El puntaje esta dentro de los parametros")
+#   print("No requiere revision")
 
 
 
@@ -65,35 +64,35 @@ else:
 #-------------------------------
 
 
-print("\n Generando grafico de Barras")
+#print("\n Generando grafico de Barras")
 
 
-sns.set_theme(style="whitegrid")
-pit.figure(figsize=(9,5))
+#sns.set_theme(style="whitegrid")
+#pit.figure(figsize=(9,5))
 
 
 #Define al grafico
-sns.barplot(
-   data= df, #Contiene los datos
-   x="category", #Define que datos aparecen en el eje x
-   y="total attempts team1", #Define que datos aparecen en el eje y
-   estimator=sum,
-   errorbar=None, #Desactiva las barras de error
-   palette="viridis" #Paleta de color
-)
+#sns.barplot(
+#   data= df, #Contiene los datos
+#   x="category", #Define que datos aparecen en el eje x
+#   y="total attempts team1", #Define que datos aparecen en el eje y
+#   estimator=sum,
+#   errorbar=None, #Desactiva las barras de error
+#   palette="viridis" #Paleta de color
+#)
 
 
 #Otorga el titulo del grafico
-pit.title("Distibucion de las categorias", fontsize=14)
-pit.xlabel("Categoria", fontsize=11)
-pit.ylabel("Empates team1", fontsize=11)
+#it.title("Distibucion de las categorias", fontsize=14)
+#pit.xlabel("Categoria", fontsize=11)
+#pit.ylabel("Empates team1", fontsize=11)
 
 
-pit.tight_layout()
-pit.xticks(rotation=40, fontsize=6)
-pit.savefig("grafico_barras.png", dpi=300)
-pit.close()
-print("grafico de barras guardada exitosamente")
+#pit.tight_layout()
+#pit.xticks(rotation=40, fontsize=6)
+#pit.savefig("grafico_barras.png", dpi=300)
+#pit.close()
+#print("grafico de barras guardada exitosamente")
 
 
 #------------------------------
@@ -124,3 +123,9 @@ print("grafico de barras guardada exitosamente")
 #pit.close()
 #print("Grafico de torta guardada exitosamente")
 
+#------------------------------
+#GRAFICO 3:
+#------------------------------
+
+filas,columnas = df.shape
+print (f"el detaframe tiene {filas} filas y {columnas} columnas")
