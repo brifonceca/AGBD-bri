@@ -6,9 +6,9 @@ import matplotlib.pyplot as pit
 #Importando csv
 df=pd.read_csv("Fifa_world_cup_matches.csv")
 
-#print("OKEY! Archivo cargado correctamente")
+print("OKEY! Archivo cargado correctamente")
 
-# Mostrando las primeras filas del data frame
+#Mostrando las primeras filas del data frame
 #print(df.head())
 
 #cuenta la cantidad de filas y columnas que tiene
@@ -123,9 +123,35 @@ df=pd.read_csv("Fifa_world_cup_matches.csv")
 #pit.close()
 #print("Grafico de torta guardada exitosamente")
 
-#------------------------------
-#GRAFICO 3:
-#------------------------------
+
+
+#-------------------------Ejercicio 1-------------------------
 
 filas,columnas = df.shape
-print (f"el detaframe tiene {filas} filas y {columnas} columnas")
+print (f"La tabla contiene {filas} filas y {columnas} columnas")
+
+#-------------------------Ejercicio 2-------------------------
+
+filtro_exacto = df['category'] == 'Group A'
+df_filtrado = df[filtro_exacto]
+
+total_registros = df_filtrado['category'].count()
+print(f"Cantidad de países: {total_registros}")
+
+#-------------------------Ejercicio 3-------------------------
+
+filtro_avanzado = df['category'].str.startswith('Group A', na=False)
+df_filtrado = df[filtro_avanzado]
+
+#-------------------------Ejercicio 4-------------------------
+
+df_dos_columnas = df_filtrado[['category', 'passes team1']]
+print(df_dos_columnas.head())
+
+#-------------------------Ejercicio 5-------------------------
+df_agrupado = df.groupby('category')['passes team1'].sum().sort_values(ascending=False)
+print(df_agrupado)
+
+#-------------------------Ejercicio 6-------------------------
+#-------------------------Ejercicio 7-------------------------
+#-------------------------Ejercicio 8-------------------------
