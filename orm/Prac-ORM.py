@@ -30,6 +30,7 @@ with Session(engine) as session:
         Productos(nombre ="Mousepad XL", precio = 2100,stock = 40,categoria = "perifericos" ),
         Productos(nombre ="Hub USB-C", precio = 5400,stock = 6,categoria = "accesorios", activo = False ),
         Productos(nombre ="Cable HDMI", precio = 1800,stock = 50,categoria = "accesorios" ),
+        Productos(nombre ="Camara", precio = None, stock = 10, categoria = "None"),
     ]
 
 #session.add_all(productos)
@@ -120,3 +121,96 @@ for nombre in emp:
     print(nombre)
 
 #----------------------------ejercicio 12----------------------------
+nada = session.query(Productos.nombre, Productos.categoria)\
+               .filter(Productos.categoria == None)\
+               .all()
+
+for nombre, categoria in nada:
+    print(nombre, categoria)
+
+#¿Que pasa si filtran por precio == None? ¿Aparece el mismo producto?
+#Si filtras por precio no pasa nada y te aparece el mismo producto
+
+#----------------------------ejercicio 13----------------------------
+hub = session.get(Productos, 9)
+
+if hub:
+    hub.stock = 20
+    hub.activo = True
+    session.commit()
+    print("¡Producto actualizado con éxito!")
+
+verificacion = session.get(Productos, 9)
+print(f"Verificación - Producto: {verificacion.nombre}, Stock: {verificacion.stock}, Activo: {verificacion.activo}")
+
+#----------------------------ejercicio 14----------------------------
+perifericos = session.query(Productos)\
+                     .filter(Productos.categoria == "perifericos")\
+                     .all()
+
+for p in perifericos:
+    if p.precio is not None:
+        p.precio = p.precio * 1.10
+
+session.commit()
+
+teclado = session.query(Productos).filter(Productos.nombre == "Teclado mecanico").first()
+if teclado:
+    print(f"Nuevo precio del {teclado.nombre}: {teclado.precio}")
+
+#¿Cuanto cuesta el Teclado mecanico despues del aumento?
+#Luego del aumento el precio actual del teclado es 10285
+
+#----------------------------ejercicio 15----------------------------
+cable = session.get(Productos, 10)
+
+if cable:
+    session.delete(cable)
+    session.commit()
+
+total_actualizado = session.query(Productos).count()
+print(f"Total de productos actualizados: {total_actualizado}")  
+
+#----------------------------ejercicio 16----------------------------
+a_borrar = session.query(Productos)\
+                  .filter(or_(Productos.precio < 2000, Productos.activo == False))\
+                  .all()
+
+for p in a_borrar:
+    session.delete(p)
+
+session.commit()
+print(f"Cantidad de productos borrados: {len(a_borrar)}")
+
+#¿Cuantos borraron?
+# 0, debido a que el unico producto que era menor a 2000 era el Cable HDMI
+#y como fue eliminado en el ejercicio 15 no vuelve a aparecer, ademas de que 
+#Hub USB-C esta inactivo
+
+#----------------------------EXTRA 1----------------------------
+usb = session.query(Productos.nombre)\
+                       .filter(Productos.nombre.contains("USB"))\
+                       .all()
+
+for nombre in usb:
+    print(nombre)
+
+#----------------------------EXTRA 2----------------------------
+ordenados = session.query(Productos.nombre, Productos.categoria, Productos.precio)\
+                   .order_by(Productos.categoria, Productos.precio)\
+                   .all()
+
+for nombre, categoria, precio in ordenados:
+    print(nombre, categoria, precio)
+
+#----------------------------EXTRA 3----------------------------
+activos = session.query(Productos)\
+                 .filter(Productos.activo == True)\
+                 .count()
+inactivos = session.query(Productos)\
+                   .filter(Productos.activo == False)\
+                   .count()
+
+print(f"Productos activos: {activos}")
+print(f"Productos inactivos: {inactivos}")
+#Aparecen 0 inactivos pq en el ejercicio 13 cambie el estado del Hub USB-C
