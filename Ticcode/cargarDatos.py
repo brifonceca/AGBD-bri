@@ -1,66 +1,78 @@
-from sqlalchemy.orm import sessionmaker
-# Importá tu engine y tus modelos desde el archivo donde los tenés (por ej. schema.py o models.py)
+from sqlalchemy.orm import Session
 from schema import engine, Curso, Alumno, Consigna, Entrega
 
-# 1. Crear la sesión de SQLAlchemy
-Session = sessionmaker(bind=engine)
-session = Session()
+def cargar_datos(session):
+    if session.query(Curso).count() > 0:
+        print("La base ya tiene datos cargados. No se hace nada.")
+        return
 
-# 2. Insertar Cursos
-cursos = [
-    Curso(nombre="1° Año - Introducción a la Programación"),
-    Curso(nombre="2° Año - Lógica y Algoritmos"),
-    Curso(nombre="3° Año - Programación Web y BD"),
-    Curso(nombre="4° Año - Desarrollo de Software")
-]
-session.add_all(cursos)
-session.commit()  # Al hacer commit, SQLAlchemy asigna automáticamente los IDs (1, 2, 3, 4)
+    cursos = [
+        Curso(nombre="1° Año - Introducción a la Computación y Algoritmos"),
+        Curso(nombre="2° Año - Lógica de Programación y Estructuras Básicas"),
+        Curso(nombre="3° Año - Bases de Datos Relacionales y SQL"),
+        Curso(nombre="4° Año - Programación Orientada a Objetos (Python / Java)"),
+        Curso(nombre="5° Año - Desarrollo Web Full Stack y APIs"),
+        Curso(nombre="6° Año - Proyecto Integrador y Prácticas Profesionales")
+    ]
+    session.add_all(cursos)
+    session.commit()  
 
-# 3. Insertar Alumnos (usando los IDs o instancias de los cursos recién creados)
-alumnos = [
-    Alumno(nombre="Martina Gómez", curso_id=cursos[0].id),
-    Alumno(nombre="Lucas Rodríguez", curso_id=cursos[0].id),
-    Alumno(nombre="Sofía Benítez", curso_id=cursos[1].id),
-    Alumno(nombre="Mateo Fernández", curso_id=cursos[2].id),
-    Alumno(nombre="Valentina López", curso_id=cursos[3].id)
-]
-session.add_all(alumnos)
-session.commit()  # Asigna IDs a los alumnos (1, 2, 3, 4, 5)
+    alumnos = [
+        Alumno(nombre="Martina Gómez", curso_id=cursos[0].id),    # 1° Año
+        Alumno(nombre="Lucas Rodríguez", curso_id=cursos[0].id),  # 1° Año
+        Alumno(nombre="Sofía Benítez", curso_id=cursos[1].id),    # 2° Año
+        Alumno(nombre="Mateo Fernández", curso_id=cursos[2].id),  # 3° Año
+        Alumno(nombre="Valentina López", curso_id=cursos[4].id)   # 5° Año
+    ]
+    session.add_all(alumnos)
+    session.commit()
 
-# 4. Insertar Consignas / Tareas
-consignas = [
-    Consigna(titulo="Práctica 1: Bucles `for` y `while`", descripcion="Resolver los 5 ejercicios de lógica usando estructuras repetitivas.", curso_id=cursos[0].id),
-    Consigna(titulo="TP Integrador: POO y Clases", descripcion="Crear un diagrama de clases y su implementación en código.", curso_id=cursos[1].id),
-    Consigna(titulo="Creación de Base de Datos y ORM", descripcion="Configurar SQLAlchemy y realizar la carga inicial de datos.", curso_id=cursos[2].id)
-]
-session.add_all(consignas)
-session.commit()  # Asigna IDs a las consignas (1, 2, 3)
+    consignas = [
+        Consigna(
+            titulo="Práctica 1: Introducción a pseudocódigo", 
+            descripcion="Resolver los primeros diagramas de flujo básicos.", 
+            curso_id=cursos[0].id
+        ),
+        Consigna(
+            titulo="TP Integrador: Consultas SQL Básicas", 
+            descripcion="Diseñar y consultar tablas usando SELECT, WHERE y JOIN en phpMyAdmin.", 
+            curso_id=cursos[2].id
+        ),
+        Consigna(
+            titulo="Consigna API: Endpoints con Spring Boot", 
+            descripcion="Configurar controladores REST y conexión a base de datos.", 
+            curso_id=cursos[4].id
+        )
+    ]
+    session.add_all(consignas)
+    session.commit()
 
-# 5. Insertar Entregas (Relaciona al Alumno con la Consigna enviada)
-entregas = [
-    Entrega(
-        nombre="Entrega TP1 - Martina",
-        codigo_enviado="for i in range(10):\n    print('Hola Mundo')",
-        estado="Aprobado",
-        alumno_id=alumnos[0].id,      # Martina Gómez
-        consigna_id=consignas[0].id   # Práctica 1: Bucles
-    ),
-    Entrega(
-        nombre="Entrega TP1 - Lucas",
-        codigo_enviado="count = 0\nwhile count < 10:\n    print(count)\n    count += 1",
-        estado="Pendiente",
-        alumno_id=alumnos[1].id,      # Lucas Rodríguez
-        consigna_id=consignas[0].id   # Práctica 1: Bucles
-    ),
-    Entrega(
-        nombre="Entrega ORM - Mateo",
-        codigo_enviado="session.add_all([Curso(...), Alumno(...)])\nsession.commit()",
-        estado="Revisar",
-        alumno_id=alumnos[3].id,      # Mateo Fernández
-        consigna_id=consignas[2].id   # Creación de Base de Datos
-    )
-]
-session.add_all(entregas)
-session.commit()
+    entregas = [
+        Entrega(
+            nombre="Entrega TP1 - Martina",
+            codigo_enviado="Algoritmo Inicio\n Escribir 'Hola mundo'\nFinAlgoritmo",
+            estado="Aprobado",
+            alumno_id=alumnos[0].id,
+            consigna_id=consignas[0].id
+        ),
+        Entrega(
+            nombre="Entrega SQL - Mateo",
+            codigo_enviado="SELECT * FROM alumnos WHERE curso_id = 3;",
+            estado="Pendiente",
+            alumno_id=alumnos[3].id,
+            consigna_id=consignas[1].id
+        )
+    ]
+    session.add_all(entregas)
+    session.commit()
 
-print("¡Datos de TIC code insertados correctamente en phpMyAdmin!")
+    print("¡Datos de TIC code insertados correctamente!")
+    print(f"  Cursos:   {session.query(Curso).count()}")
+    print(f"  Alumnos:  {session.query(Alumno).count()}")
+    print(f"  Consignas:{session.query(Consigna).count()}")
+    print(f"  Entregas: {session.query(Entrega).count()}")
+
+
+if __name__ == "__main__":
+    with Session(engine) as session:
+        cargar_datos(session)
